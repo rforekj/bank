@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import bank.dto.EmployeeDTO;
 import bank.model.Employee;
 
 public interface EmployeeRepository extends CrudRepository<Employee, Integer>{

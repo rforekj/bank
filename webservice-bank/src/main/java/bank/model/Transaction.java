@@ -1,6 +1,5 @@
 package bank.model;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -12,22 +11,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import lombok.Data;
 
 @Entity
 @Data
 public class Transaction {
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 	private String content;
 	private Date createAt;
 	private double amount;
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_deposit", referencedColumnName = "id")
 	private DepositAccount depositAccount;
-	@ManyToOne(fetch = FetchType.LAZY, optional = true)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_credit", referencedColumnName = "id")
 	private CreditAccount creditAccount;
 	@PrePersist

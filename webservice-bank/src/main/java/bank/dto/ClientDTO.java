@@ -3,11 +3,8 @@ package bank.dto;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
-import bank.model.CreditAccount;
-import bank.model.DepositAccount;
 import lombok.Data;
 
 @Data

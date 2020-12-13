@@ -1,18 +1,13 @@
 package bank.controller;
 
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,9 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import bank.dto.ClientDTO;
 import bank.model.Client;
-import bank.model.CreditAccount;
 import bank.repository.ClientRepository;
-import bank.repository.CreditAccountRepository;
 
 @RestController
 @RequestMapping(path = "client", produces = "application/json")
@@ -65,6 +58,11 @@ public class ClientController {
 		}
 		return null;
 	}
+	@GetMapping("/topTen")
+	public List<ClientDTO> getTopTenClient() {
+		List<Client> clients = (List<Client>) clientRepository.findTopTen();
+		return clients.stream().map(this::convertToClientDTO).collect(Collectors.toList());
+	}
 
 	
 	@PostMapping(consumes = "application/json")
@@ -80,15 +78,16 @@ public class ClientController {
 		return true;
 	}
 	@PutMapping("/{id}")
-	public Client updateClient(@PathVariable("id") int id, @RequestBody ClientDTO client) {
+	public ClientDTO updateClient(@PathVariable("id") int id, @RequestBody ClientDTO clientDTO) {
 		Optional<Client> clientOptional = clientRepository.findById(id);
 		if(clientOptional.isPresent()) {
-			Client _client = clientOptional.get();
-			_client.setIdentityCard(client.getIdentityCard());
-			_client.setAddress(client.getAddress());
-			_client.setDateOfBirth(client.getDateOfBirth());
-			_client.setName(client.getName());
-			return clientRepository.save(_client);
+			Client client = clientOptional.get();
+			client.setIdentityCard(clientDTO.getIdentityCard());
+			client.setAddress(clientDTO.getAddress());
+			client.setDateOfBirth(clientDTO.getDateOfBirth());
+			client.setName(clientDTO.getName());
+			clientRepository.save(client);
+			return clientDTO;
 		}
 		return null;
 	}
